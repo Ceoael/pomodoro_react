@@ -48,7 +48,7 @@ const SettingsModal = ({submitHandler, formState, inputHandler,modalOFF}) => {
                 initialValue={formState.inputs.longBreakInterval.value}
                 initialValid={formState.inputs.longBreakInterval.isValid}/>
 
-            <div class={classes.SettingsForm__ButtonWrapper}>
+            <div className={classes.SettingsForm__ButtonWrapper}>
                 <button type="button"  className={classes.Button} onClick={modalOFF}>CANCEL</button>
                 <button type="submit" className={classes.Button} disabled={!formState.isValid}>OK</button>
             </div>

@@ -11,18 +11,22 @@ import Buttons from '../../components/buttons/Buttons';
 import Modal from './../../shared/components/Modal/Modal';
 import Backdrop from './../../shared/components/Backdrop/Backdrop';
 
-const PomodoroBuilder = (props) => {
+const PomodoroBuilder = () => {
     const dispatch = useDispatch();
 
-    const [timer, setTimer] = useState(null);
     const alarmSound = useRef();
-    
+
+    const [timer, setTimer] = useState(null);
     const [breakIsActive, setBreakIsActive] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [countdownIsRunning, setCountdownIsRunning] = useState(false);
     const [longBreakIsActive, setLongBreakIsActive] = useState(false);
 
     const timerSettings = useSelector(store => store.pomodoro.timerSettings);
+    const currentBreak = useSelector(store => store.pomodoro.breakTimeLeft);
+    const currentSession = useSelector(store => store.pomodoro.sessionTimeLeft);
+    const interval = useSelector(store => store.pomodoro.sessionsToLongBreak);
+
     useEffect(() => {
         const {session, shortBreak, longBreakInterval } = timerSettings;
         dispatch(pomodoroActions.setSessionTimeLeft({value: session}));
@@ -30,25 +34,13 @@ const PomodoroBuilder = (props) => {
         dispatch(pomodoroActions.setSessionsToLongBreak({value: longBreakInterval}));
         setBreakIsActive(false);
         setLongBreakIsActive(false);
-    }, [timerSettings])
-
-    const currentBreak = useSelector(store => store.pomodoro.breakTimeLeft);
-    const currentBreakTime = timeFormattedForDisplay(currentBreak); // optimize this, closure?
-
-    const currentSession = useSelector(store => store.pomodoro.sessionTimeLeft);
-    const currentSessionTime = timeFormattedForDisplay(currentSession); // optimize this, closure?
-
-    const interval = useSelector(store => store.pomodoro.sessionsToLongBreak);
+    }, [timerSettings, dispatch])
 
     const turnOnBreakTab = (isTrue) => setBreakIsActive(isTrue);
 
-    const openSettings = () => {
-        setShowSettings(true);
-    }
-    const closeSettings = () => {
-        setShowSettings(false);
-    }
-
+    const openSettings = () => setShowSettings(true);
+    const closeSettings = () => setShowSettings(false);
+    
     const resetCurrentTabTime = () => {
         if (breakIsActive) {
             if (interval === 1) {
@@ -72,7 +64,7 @@ const PomodoroBuilder = (props) => {
     }
 
     useEffect(() => {
-        if (currentSessionTime === '00:00') {
+        if (timeFormattedForDisplay(currentSession) === '00:00') {
             playSound();
             dispatch(pomodoroActions.decrementBreakInterval());
             setCountdownIsRunning(false);
@@ -80,10 +72,10 @@ const PomodoroBuilder = (props) => {
             setBreakIsActive(true);
             dispatch(pomodoroActions.setSessionTimeLeft({value: timerSettings.session}));
         }
-    }, [currentSessionTime])
+    }, [currentSession, dispatch])
 
     useEffect(() => {
-        if (currentBreakTime === '00:00') {
+        if (timeFormattedForDisplay(currentBreak) === '00:00') {
             playSound();
             setCountdownIsRunning(false);
             clearInterval(timer);
@@ -101,7 +93,7 @@ const PomodoroBuilder = (props) => {
             }
             setBreakIsActive(false);
         }
-    }, [currentBreakTime])
+    }, [currentBreak, dispatch])
 
     useEffect(()=>{
         return () => {
@@ -117,10 +109,8 @@ const PomodoroBuilder = (props) => {
         const timer = setInterval(() => {
             if (breakIsActive) {
                 dispatch(pomodoroActions.decrementBreakTimeLeft());
-                console.log('break, tiemr id: ' + timer);
             } else {
                 dispatch(pomodoroActions.decrementSessionTimeLeft());
-                console.log('session, timer id: ' + timer);
             }
         }, 1000);
         setTimer(timer);
@@ -136,15 +126,12 @@ const PomodoroBuilder = (props) => {
 
     return (
         <PomodoroBuilderWrapper>
-
             <Backdrop show={showSettings} clicked={closeSettings}/>
             <Modal modalOpen={showSettings} modalOFF={closeSettings} modalName="Settings">
                 <SettingsContainer 
                     modalOFF={closeSettings}
                     timerSettings={timerSettings}/>
             </Modal>
-            
-
             <Navigation
                 longBreakIsActive={longBreakIsActive} 
                 timerIsRunning={countdownIsRunning}
@@ -153,13 +140,12 @@ const PomodoroBuilder = (props) => {
                 settingsOnHandler={openSettings}/>
             <Display 
                 breakIsActive={breakIsActive}
-                currentBreakTime={currentBreakTime}
-                currentSessionTime={currentSessionTime}/>
+                currentBreakTime={timeFormattedForDisplay(currentBreak)}
+                currentSessionTime={timeFormattedForDisplay(currentSession)}/>
             <Buttons
                 timerIsRunning={countdownIsRunning}
                 resetButtonHandler={resetCurrentTabTime}
                 startButtonHandler={startButtonHandler}/>
-
             <audio ref={alarmSound} >
                 <source src="/sounds/mixkit-unlock-game-notification-253.wav" />
             </audio>

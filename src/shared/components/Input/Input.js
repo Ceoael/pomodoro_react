@@ -35,7 +35,6 @@ const Input = props => {
 
     useEffect(() => {
         onInput(id, value, isValid)
-        console.log(`isValid: ${isValid}`)
     }, [id, value, isValid, onInput]);
 
     const changeHandler = event => {
@@ -71,7 +70,6 @@ const Input = props => {
             onBlur={touchHandler}
             value={inputState.value} />
         );
-
 
     return (
         <div className={classes.Input}>
