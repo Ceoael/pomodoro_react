@@ -5,9 +5,11 @@ import { pomodoroActions } from './../../store/pomodoroSlice';
 
 import Navigation from '../../components/navigation/Navigation';
 import Display from '../../components/display/Display';
-// import SettingsContainer from '../settingsContainer/SettingsContainer';
+import SettingsContainer from '../settingsContainer/SettingsContainer';
 import PomodoroBuilderWrapper from '../../components/pomodoroBuilderWrapper/pomodoroBuilderWrapper';
 import Buttons from '../../components/buttons/Buttons';
+import Modal from './../../shared/components/Modal/Modal';
+import Backdrop from './../../shared/components/Backdrop/Backdrop';
 
 const PomodoroBuilder = (props) => {
     const dispatch = useDispatch();
@@ -39,6 +41,7 @@ const PomodoroBuilder = (props) => {
     const interval = useSelector(store => store.pomodoro.sessionsToLongBreak);
 
     const turnOnBreakTab = (isTrue) => setBreakIsActive(isTrue);
+
     const openSettings = () => {
         setShowSettings(true);
     }
@@ -133,12 +136,21 @@ const PomodoroBuilder = (props) => {
 
     return (
         <PomodoroBuilderWrapper>
+
+            <Backdrop show={showSettings} clicked={closeSettings}/>
+            <Modal modalOpen={showSettings} modalOFF={closeSettings} modalName="Settings">
+                <SettingsContainer 
+                    modalOFF={closeSettings}
+                    timerSettings={timerSettings}/>
+            </Modal>
+            
+
             <Navigation
                 longBreakIsActive={longBreakIsActive} 
                 timerIsRunning={countdownIsRunning}
                 breakIsActive={breakIsActive}
                 turnOnBreakTabHandler={turnOnBreakTab}
-                settingsOnHandler={() => console.log('Open settings')}/>
+                settingsOnHandler={openSettings}/>
             <Display 
                 breakIsActive={breakIsActive}
                 currentBreakTime={currentBreakTime}

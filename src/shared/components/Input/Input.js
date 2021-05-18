@@ -63,7 +63,7 @@ const Input = props => {
         /> 
         ) : (
         <input
-            className={classes.Input__input}
+            className={`${classes.Input__input} ${(!inputState.isValid && inputState.isTouched) ? classes['Input__input--error'] : ''}`}
             id={props.id}
             type={props.type}
             placeholder={props.placeholder}
@@ -74,21 +74,12 @@ const Input = props => {
 
 
     return (
-        <div 
-            className={`${classes.Input} 
-                ${!inputState.isValid && 
-                inputState.isTouched &&
-                classes['Input--invalid']}`}
-            >
-            <label 
-                className={classes.Input__label}
-                htmlFor={props.id}>{props.label}
-            </label>
-            {element}
-            {!inputState.isValid && 
-            inputState.isTouched && 
-            <p
-                className={classes.Input__error}>{props.errorText}</p>}
+        <div className={classes.Input}>
+            <div className={classes.Input__wrapper}>
+                <label className={classes.Input__label} htmlFor={props.id}>{props.label}</label>
+                {element}
+                {!inputState.isValid && inputState.isTouched && <p className={classes.Input__error}>{props.errorText}</p>}
+            </div>
         </div>
     )
 }

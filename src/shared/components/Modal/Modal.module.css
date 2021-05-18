@@ -12,11 +12,8 @@
     max-height: 95vh;
     width: 90%;
     padding: 0 20px;
-
-    /* background-color: #343840; */
-    background: #4b6cb7;  
-    background: -webkit-linear-gradient(to right, #4b6cb7, #5f2c82);  
-    background: linear-gradient(to right, #4b6cb7, #5f2c82);
+    
+    background: #343840;
 
     border-radius: 5px;
     

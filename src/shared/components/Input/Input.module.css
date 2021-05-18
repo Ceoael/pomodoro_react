@@ -1,81 +1,63 @@
+:root {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 .Input {
-    display: flex;
     width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    /* margin: 5px 0; */
+    position: relative;
     margin-bottom: 10px;
+    padding: 5px;
 }
-
-.Input--invalid {
-    padding-top: 5px;
-    background-color: rgba(255, 0, 0, 0.3);
-    border-radius: 5px;
+.Input__wrapper {
+    display: flex;
+    flex-direction: column;
 }
-
 .Input__label {
-    padding: 3px 10px;
-    font-size: 1.3rem;
-}
+    padding-bottom: 5px;
 
-.Input__input { 
-    max-width: 45%;
-    flex-grow: 1;
-    padding: 5px 10px;
-    margin: 0 10px;
-    
-    border-radius: 5px;
-    border: none;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
 }
-
-.Input__error {
-    padding: 5px 10px;
-    
+.Input__label::first-letter {
+    text-transform: capitalize;
+}
+.Input__input {
     width: 100%;
+    padding: 10px 10px;
 
+    border-radius: 5px;
+    border: 2px solid transparent;
+
+    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
-    font-style: italic;
-    font-weight: bold;
-    text-align: center;
+
+    outline: none;
+    background-color: #f2f5f7;
+    transition: border-color .3s ease-in-out, color .3s ease-in-out,
+        background-color .3s ease-in-out;
+}
+.Input__input:focus {
+    border-color: #0071fe;
 }
 
-@media (min-width: 560px) {
-    .Input {
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 5px;
-    }
+.Input__input--error {
+    background: #fddfe2;
+    color: #f23648;
 }
-
-@media (min-width: 768px) {
-    .Input__label {
-        font-size: 2rem;
-    }
-    
-    .Input__input { 
-        font-size: 2rem;
-    }
-    
-    .Input__error {
-        font-size: 1.5rem;
-    }
+.Input__input--error:focus {
+    border-color: #f23648;
 }
+.Input__error {
+    padding-top: 10px;
 
-@media (min-width: 992px) {
-    .Input {
-        margin-bottom: 20px;
-    }
-    .Input__label {
-        font-size: 2.4rem;
-    }
-    
-    .Input__input { 
-        font-size: 2.4rem;
-    }
-    
-    .Input__error {
-        font-size: 2rem;
-    }
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #f23648;
+}
+.Input__error::first-letter {
+    text-transform: capitalize;
 }

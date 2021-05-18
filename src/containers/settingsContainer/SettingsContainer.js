@@ -1,52 +1,66 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import SettingsModal from '../../components/settingsModal/SettingsModal';
 import { useForm } from './../../shared/hooks/form-hooks';
 
-const SettingsContainer = (props) => {
+import { pomodoroActions } from './../../store/pomodoroSlice';
+
+const SettingsContainer = ({modalOFF, timerSettings}) => {
+    const dispatch = useDispatch();
+
     const [formState, inputHandler] = useForm({
         session: {
-            value: props.timerSettings.pomodoro || 25,
+            value: timerSettings.session || 25,
             isValid: true
         },
         break: {
-            value: props.timerSettings.shortBreak || 5,
+            value: timerSettings.shortBreak || 5,
             isValid: true
         },
         longBreak: {
-            value: props.timerSettings.longBreak || 15,
+            value: timerSettings.longBreak || 15,
             isValid: true
         },
         longBreakInterval: {
-            value: props.timerSettings.longBreakInterval || 2,
+            value: timerSettings.longBreakInterval || 2,
             isValid: true
         }
     }, false);
 
-    const saveSettingsHandler = (settings) => {
-        props.saveSettings(settings);
-        props.modalOFF();
+    const saveSettingsHandler = (settingsData) => {
+        const newSettings = objectValuesToNumber(settingsData);
+        dispatch(pomodoroActions.setTimerSettings({value: newSettings}));
+
+        modalOFF();
     }
 
     const submitHandler = event => {
         event.preventDefault();
 
         saveSettingsHandler({
-            pomodoro: formState.inputs.session.value,
+            session: formState.inputs.session.value,
             shortBreak: formState.inputs.break.value,
             longBreak: formState.inputs.longBreak.value,
             longBreakInterval: formState.inputs.longBreakInterval.value,
         })
     }
+
+    function objectValuesToNumber (settingsData) {
+        const formattedObject = {};
+        for ( const[key, value] of Object.entries(settingsData)) {
+            formattedObject[key] = +value;
+        }
+        return formattedObject;
+    }
     
     return (
         <React.Fragment>
             <SettingsModal
-                modalOpen = {props.modalOpen}
-                submitHandler = {submitHandler}
-                formState= {formState}
-                inputHandler = {inputHandler}
-                modalOFF = {() => props.modalOFF()}/>
+                submitHandler={submitHandler}
+                formState={formState}
+                inputHandler={inputHandler}
+                modalOFF={modalOFF}/>
         </React.Fragment>
     )
 };
