@@ -1,0 +1,75 @@
+:root {
+    --darkPastelRed: #ff443a;
+    --pastelRed: #ff6961;
+    --settingsButtonBGC: #3C47E9;
+    --settingsButtonHover: #2b5bfa;
+    --textColor: #E7E7EB;
+}
+
+.ButtonsWrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+
+    margin-top: 20px;
+}
+
+.RestartButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--darkPastelRed);
+    width: 60px;
+    height: 100%;
+
+    border: none;
+    border-radius: 5px;
+
+    color: var(--textColor);
+    font-size: 1.1rem;
+    outline: none;
+
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.RestartButton--block {
+    background-color: var(--pastelRed);
+    cursor: not-allowed;
+}
+
+.RestartButton__icon {
+    font-size: 30px;
+    overflow: hidden;
+}
+
+.Button {
+    font-size: 2rem;
+    padding: 10px 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--settingsButtonBGC);
+    color: var(--textColor);
+    outline: none;
+}
+
+.Button:hover,
+.Button:active {
+    background-color: var(--settingsButtonHover);
+}
+
+
+@media (min-width: 768px) {
+    .ButtonsWrapper {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1000px) {
+    .ButtonsWrapper {
+        width: 800px;
+    }
+}
